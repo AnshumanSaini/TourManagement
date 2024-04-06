@@ -4,40 +4,99 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.hughes.TourManagement.model.Tour;
+import com.hughes.TourManagement.model.User;
 import com.hughes.TourManagement.repository.TourRepository;
+import com.hughes.TourManagement.repository.UserRepository;
 
 @Service
 public class TourService {
 
+	@Value("${jwt.expiration}")
+	private int jwtExpirationMs;
+
+	@Value("${jwt.secret}")
+	private String jwtSecret;
+
 	@Autowired
 	private TourRepository repo;
 
-	public void saveTour(Tour t) {
-		repo.save(t);
-	}
-	
-	public List<Tour> findAll() {
-		return repo.findAll();
-	}
-	
-	public Optional<Tour> display(int id) {
-		return repo.findById(id);
-	}
-	
-	public void deleteById(int id) {
-		repo.deleteById(id);
+	@Autowired
+	private UserRepository user_repo;
+	private Security sec = new Security();
+
+	public void saveTour(Tour t, String token) {
+		try {
+			int id = Integer.parseInt(sec.fetchUser(token, jwtSecret));
+			Optional<User> data = user_repo.findById(id);
+			if (data.isPresent()) {
+				t.setAdminId(id);
+				repo.save(t);
+				System.out.println("Saved Successfuly");
+			} else {
+				System.out.println("Not Saved!!!!");
+				return;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void update(Tour tour, int id) {
-		Tour previousTour = repo.findById(id).orElse(null);
-		previousTour.setDescription(tour.getDescription());
-		previousTour.setDays(tour.getDays());
-		previousTour.setName(tour.getName());
-		previousTour.setPrice(tour.getPrice());
-		repo.save(previousTour);
+	public List<Tour> findAll(String token) {
+		int ID = Integer.parseInt(sec.fetchUser(token, jwtSecret));
+		Optional<User> data = user_repo.findById(ID);
+		if (data.isPresent()) {
+			List<Tour> tour = repo.findByAdminId(ID);
+			return tour;
+		} else
+			return null;
+
+	}
+
+	public List<Tour> findAllForClient(String token) {
+		return repo.findAll();
+
+	}
+
+	public Optional<Tour> display(int id, String token) {
+		return repo.findById(id);
+
+	}
+
+	public void deleteById(int id, String token) {
+		int ID = Integer.parseInt(sec.fetchUser(token, jwtSecret));
+		Optional<User> data = user_repo.findById(ID);
+		if (data.isPresent()) {
+			repo.deleteById(id);
+		} else {
+			System.out.println("Not deleted!!!");
+			return;
+		}
+	}
+
+	public void update(Tour tour, int id, String token) {
+		int ID = Integer.parseInt(sec.fetchUser(token, jwtSecret));
+		Optional<User> data = user_repo.findById(ID);
+		if (data.isPresent()) {
+			Tour previousTour = repo.findById(id).orElse(null);
+			previousTour.setDescription(tour.getDescription());
+			previousTour.setDays(tour.getDays());
+			previousTour.setName(tour.getName());
+			previousTour.setPrice(tour.getPrice());
+			previousTour.setImage(tour.getImage());
+			previousTour.setTimestamp(tour.getTimestamp());
+			previousTour.setDestination(tour.getDestination());
+			previousTour.setStartDate(tour.getStartDate());
+			previousTour.setEndDate(tour.getEndDate());
+
+			repo.save(previousTour);
+		} else {
+			System.out.println("Error Updating!!!");
+			return;
+		}
 	}
 
 }

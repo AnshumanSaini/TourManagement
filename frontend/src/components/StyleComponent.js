@@ -8,7 +8,7 @@ import world from "../images/world.jpg"
 
 export default function StyleComponent() {
   return (
-    <div className="container py-5">
+    <div className="container py-5" id="stylecomponent">
       <div className="row ">
         <div className="col-12 col-md-6">
           <h4 className="text-uppercase first-heading">Easy and fast</h4>

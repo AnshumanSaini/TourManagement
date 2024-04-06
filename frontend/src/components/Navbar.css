@@ -6,6 +6,7 @@
   letter-spacing: 1px;
 }
 button {
+  border: none;
   background: linear-gradient(to right, #fe5252, #ffb89a);
 }
 
@@ -33,4 +34,8 @@ button:hover {
   font-family: "Noto Serif Old Uyghur", serif;
   font-weight: 400;
   font-style: normal;
+}
+
+.navbar .logout{
+  width: 50px;  
 }

@@ -26,7 +26,6 @@ public class UserController {
 	
 	@RequestMapping(value = "/getuser", method = RequestMethod.GET)
 	public User getUser(@RequestHeader("token") String token) {
-		System.out.println(token);
 		return user_serv.getUser(token);
 	}
 

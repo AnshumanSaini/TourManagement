@@ -1,8 +1,19 @@
 import React from "react";
 import "./Intro.css";
 import intro from "../images/intro.jpg";
+import { Link } from "react-router-dom";
+
+const scrollToElement = (elementId) => {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};
 
 export default function Intro() {
+  const handleClick = () => {
+    scrollToElement("stylecomponent");
+  };
   return (
     <div className="container intro mt-5">
       <div className="row">
@@ -19,10 +30,8 @@ export default function Intro() {
             horizons and create lifelong memories with Safar as your trusted
             travel companion.
           </p>
-          <button
-            className="btn intro-button me-2 nav-button mt-2"
-            type="button"
-          >
+
+          <button className="btn intro-button me-2  mt-2" type="button" onClick={handleClick}>
             Explore
           </button>
         </div>

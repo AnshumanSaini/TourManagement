@@ -10,10 +10,10 @@
 }
 
 .review-card .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 0 20px rgba(255, 199, 199, 0.941);
 }
 
-.review-card .card:hover{
-    transform: scale(1.05);
+.review-card .card:hover {
+  transform: scale(1.05);
 }

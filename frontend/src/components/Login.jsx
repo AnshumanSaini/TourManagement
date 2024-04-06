@@ -32,6 +32,7 @@ function Login() {
       //Save the auth-token and redirect.
       localStorage.clear();
       localStorage.setItem("token",await res.text());
+      localStorage.setItem("role","admin");
       navigate("/admin/dashboard");
       console.log("Logged in Successfully");
   }
@@ -40,7 +41,7 @@ function Login() {
   }
 }
   return (
-    <div class="container">
+    <div class="con">
       <div class="video">
         <video
           class="sub-container"
@@ -52,6 +53,7 @@ function Login() {
           type="video/mp4"
         />
         <div class="button-container">
+        <h3 className="text-uppercase login-heading">Admin Login Page</h3>
           <div className="p-5">
             <img src={logo} alt="This is the logo" width="130px" />
           </div>
@@ -62,7 +64,6 @@ function Login() {
                 console.log("Login Failed");
               }}
             />
-            ;
           </div>
         </div>
       </div>
